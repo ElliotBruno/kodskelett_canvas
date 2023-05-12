@@ -1,5 +1,12 @@
+* {
+  margin: 0;
+}
 body {
   margin: 0px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background-size: contain;
+  background-image: url(images/aobGY_.gif);
 }
 
 canvas {
