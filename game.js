@@ -1,11 +1,9 @@
 //  ------------ Setup ------------
 window.focus;
-// const SCREENWIDTH = innerWidth;
-// const SCREENHEIGHT = innerHeight;
 const player=document.getElementById("player")
 const ground=document.getElementById("ground")
 let gameCanvas = document.getElementById("gameCanvas");
-let c = gameCanvas.getContext("2d"); // Drawing object
+let c = gameCanvas.getContext("2d"); 
 gameCanvas.height = window.innerHeight;
 gameCanvas.width = window.innerWidth;
 
@@ -15,46 +13,46 @@ gameCanvas.width = window.innerWidth;
 // -------------------------------------
 // Player variables
 let playerX = 150;
-let playerY = 680;
-let playerWidth = 15;
-let playerHeight = 15;
+let playerY = 580;
+let playerWidth = 170;
+let playerHeight = 170;
 let dx = 20;
 let dy = 100;
 let onground = false;
 let reset = false;
-let LazserX = 600;
-let LazerY = 680;
+let currentBackground = 'aobGY_.gif';
+
+let backgroundState = 1; // 1 represents the first background, 2 represents the second background, 3 represents the third background
 var Player;
-const platformY = 550; // Assuming a fixed Y-coordinate for the platform
-const platformWidth = 250; // Assuming a fixed width for the platform
-const platformheight=90; //Assuming a fixed height for the platform
-const platformX=400; //ASsuming a fixed X-coordinate for the platform
-const objectY = 400; // Assuming a fixed Y-coordinate for the object
-const objectWidth = 200; // Assuming a fixed width for the object
-const objectheight=200; //Assuming a fixed height for the object
-const objectX=1100; //Assuming a fixed X-coordinate for the object
-// ...
+
+const sprite = document.createElement('img');
+
+const platformY = 380; // Assuming a fixed Y-coordinate for the platform
+const platformWidth = 800; // Assuming a fixed width for the platform
+const platformheight=170; //Assuming a fixed height for the platform
+const platformX=350; //ASsuming a fixed X-coordinate for the platform
+const objectY = 580; // Assuming a fixed Y-coordinate for the object 
+const objectWidth = 150; // Assuming a fixed width for the object 
+const objectheight=150; //Assuming a fixed height for the object 
+const objectX=975; //Assuming a fixed X-coordinate for the object 
+
+const objX=350;
+const objY=460;
+const objWidth=200;
+const objheight=150;
 
 
 
-// if (
-//   playerY + playerHeight >= platformY && // Player's bottom edge is below or at the platform's top edge
-//   playerY <= platformY + 10 && // Player's top edge is above or within 10 units of the platform's bottom edge (adjust the value as needed)
-//   playerX + playerWidth >= 0 && // Player's right edge is to the right of the game canvas's left edge
-//   playerX <= gameCanvas.width - platformWidth // Player's left edge is to the left of the platform's right edge
-// ) {
-//   onground = true;
-//   playerY = platformY - playerHeight;
-// }
+sprite.src = 'images/d.gif';
 
-// ...
+
 
 
 // create a new image element
 const image = document.createElement('img');
 
+image.src='images/ss.png'
 // set the source of the image
-image.src = 'images/pl.png';
 
 // add the image to the HTML document
 document.body.appendChild(image);
@@ -69,6 +67,14 @@ image2.src = 'images/dog.png';
 // add the image to the HTML document
 document.body.appendChild(image2);
 
+
+const image3 = document.createElement('img');
+
+image.src='images/ö.png'
+// set the source of the image
+
+// add the image to the HTML document
+document.body.appendChild(image3);
 
 
 
@@ -123,55 +129,308 @@ document.addEventListener("keyup", (e) => {
 // -------------------------------------
 // ------------ Animation ------------
 function animate() {
+
+  
+  
   requestAnimationFrame(animate); // Run gameloop recursively
   c.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Clear screen
 
-  c.fillRect(playerX, playerY, playerWidth, playerHeight); // Draw player
-  c.drawImage(image,platformX, platformY, platformWidth, platformheight)
+
+    let backgroundImage;
+    let objectImage;
+    let ObjectImage;
+    let ObjImage;
+  
+    switch (backgroundState) {
+      case 1:
+        if (backgroundState===1) {
+          ObjectImage='images/dog.png'
+          ObjImage='images/ss.png'
+          break; 
+        };
+      
+      case 2:
+        if (backgroundState===2) {
+
+
+          break; 
+
+        };
+        
+      case 3:
+        if (backgroundState===3) {
+          // ObjectImage='images/k.gif'  
+
+        break;
+          
+        };
+        case 4:
+          if (backgroundState===4) {
+            ObjectImage='images/cdd.png'  
+  
+          break;
+            
+          };
+
+   
+    }
+  
+    // Update the gameCanvas background image and object image source
+    gameCanvas.style.backgroundImage = backgroundImage;
+    image.src = objectImage;
+    image2.src=ObjectImage;
+    image3.src=ObjImage;
+
+    
+
+  
+    c.drawImage(sprite, playerX, playerY, playerWidth, playerHeight);
+    c.drawImage(image,platformX, platformY, platformWidth, platformheight)
   c.drawImage(image2,objectX,objectY,objectWidth,objectheight)
+  c.drawImage(image3,objX,objY,objWidth,objheight)
 
 
 
-  // if (playerY >= LPositionY && playerX >= deathPositionX) {
-  //   // Player has reached the death position
-  //   console.log('Player died!');
-  //   // Handle player death logic here (e.g., reset position, decrease lives, etc.)
-  // } else {
-  //   if (playerY >= 680) {
-  //     onground = true;
-  //   } else {
-  //     onground = false;
-  //   }
-  // console.log(image);
-  if(playerY>=platformY && playerY>=platformheight && playerX >= platformX && playerX<=610 ){
+
+
+
+  
+
+
+  if (backgroundState===1) {  if(playerY>=objY && playerY>=objheight && playerX >= objX && playerX<=objX + objWidth && playerX<400 ){
+    onground = true;
+    
+  }
+  else{
+    onground=false;
+  }
+  if (  playerX <= objectX &&
+    playerX > 915  &&
+    playerY <= objectY   &&
+    playerY > 500) {
+  
+    playerX = 150;
+    playerY = 580;
+    
+    
+    
+  }
+  if (  playerX < 1411 &&
+    playerX + playerWidth > 1410 &&
+    playerY < 580 &&
+    700> playerY) {
+    // Reseting
+    playerX = 150;
+    playerY = 580;
+    
+    
+    
+  }
+  if (  playerX < 790 &&
+    playerX + playerWidth > 780 &&
+    playerY < 580 &&
+    350< playerY) {
+    // Reseting
+    playerX = 150;
+    playerY = 580;
+    
+    
+    
+  }
+  }
+
+  if (playerY+gameCanvas.height<gameCanvas.height) {
+    playerY+=20;
+    
+  }
+
+
+  if (backgroundState===2) {
+    if(playerY>=platformY && playerY>=platformheight && playerX >= platformX  && playerX<=platformWidth ){
+      onground = true;
+      
+    }
+    else{onground=false;}
+
+    if(playerY>=400 && playerX >=370 && playerX<=800 ){
+  
+
+    playerY=580;
+    playerX=150;
+      
+    }
+
+    if (playerY<=300 && playerY>=280 && playerX >= 0 && playerX<=200 ) {
+      onground=true;
+      
+    }
+ 
+
+  
+
+    
+    if (playerY<=500 && playerY>=300 && playerX >= 900 && playerX<=1290 ) {
+      onground=true;
+      
+    }
+
+    if (playerY<=300 && playerY>=100 && playerX >= 780 && playerX<=950 ) {
+      onground=true;
+      
+    }
+
+
+    if (  playerX < 1290 &&
+      playerX + playerWidth > 1040 &&
+      playerY < objectY + objectheight &&
+      playerY + playerHeight > objectY) {
+      // Reseting
+      playerX = 350;
+      playerY = 380;
+      
+      
+      
+    }
+  
+  }
+  if (backgroundState===3) {if(playerY>=400  && playerX >=820 && playerX<=900 ){
+  
+
+    playerY=471;
+    playerX=180;
+      
+    }
+ 
+
+  if(playerY>=471 && playerY>=platformheight && playerX >= 0 && playerX<=gameCanvas.width ){
     onground = true;
     
   }
   else {
     onground = false;
   }
-
-  if(playerY>=objectY && playerY>=objectheight && playerX >= objectX ){
-    reset = true;
+    
+  
+  
     
   }
-  else {
-    reset = false;
+
+  if (backgroundState===4) 
+  {if (  playerX < 1200  &&
+    playerX + playerWidth > 1000 &&
+    playerY < 600 &&
+    playerY + playerHeight > 500) {
+       // Player has landed on image2
+    // Reseting
+    backgroundState=1;
+    gameCanvas.style.backgroundImage = "url('images/aobGY_.gif')";
+
+    playerX = 150;
+    playerY = 580;
+
+
+    
   }
+}
 
 
-  if(playerY >= 680){
+
+
+
+
+
+if (playerX >= gameCanvas.width - playerWidth) {
+  if (backgroundState === 2) {
+    
+    // Change to the third background
+    gameCanvas.style.backgroundImage = "url('images/c.gif')";
+    backgroundState = 3;
+    playerX = 150; // Reset player's X position
+    playerY=471
+    gameCanvas.style.backgroundSize = "contain";
+  } if (backgroundState=== 1) {
+    // Change to the second background
+    gameCanvas.style.backgroundImage = "url('images/w.gif  ')";
+    backgroundState = 2;
+    // if (playerY>=500) {
+    //   onground=true    
+    // }
+    playerY=270;
+    playerX = 10; // Reset player's X position
+    gameCanvas.style.backgroundSize = "contain";
+    
+  
+  } 
+ 
+
+
+
+
+
+
+
+ 
+  if (playerX >= gameCanvas.width - playerWidth) {
+    if (backgroundState === 3) {
+      // Change to the third background
+      gameCanvas.style.backgroundImage = "url('images/win.jpg')";
+      backgroundState = 4;
+      playerX = 100; // Reset player's X position
+      gameCanvas.style.backgroundSize = "cover";
+    } 
+  }
+ 
+}
+
+
+
+
+
+
+if (gameCanvas.style.backgroundImage === "url('images/w.gif')") {
+  // Hide the images
+  image.style.display = 'none';
+  image2.style.display = 'none';
+} 
+
+
+if (playerX <= 0) {
+  if (backgroundState===2) {
+    gameCanvas.style.backgroundImage = "url('images/aobGY_.gif  ')";
+    playerX=1350;
+    gameCanvas.style.backgroundSize="contain"
+    backgroundState = 1;
+
+    
+  }
+ 
+
+}
+if (playerX <= 0) {
+  if (backgroundState===3) {
+    gameCanvas.style.backgroundImage = "url('images/w.gif  ')";
+    playerX=1350;
+    playerY=300;
+    gameCanvas.style.backgroundSize="contain"
+    backgroundState = 2;
+
+    
+  }
+ 
+
+
+}
+
+
+
+  if(playerY >= 580){
     onground = true;
   }
-  // else {
-  //   onground=false;
-  // }
+
 
   if (!onground){
     playerY += 7;
   }
-  console.log(playerX)
-  console.log(onground)
 
 
 
@@ -193,7 +452,6 @@ if(directions.left && playerX >= 0)
   
   playerX -= dx;
 }
-// console.log(playerY)
 }
 
 if (playerX > gameCanvas.width){
@@ -204,31 +462,36 @@ if (playerX > gameCanvas.width){
 // && playerX<LazserX
 function jump() {
     if (onground ){
-      playerY -=200;
+      let jumpHeight = 500; // Max jump height
+    let jumpSpeed = 15; // Players Speed upwards
+    let gravity = 3; // Gravity
 
-
-      
-
-  }
-  
-}
-function death(){
-  if (reset) {
-    playerX-=200;
     
+    let jumpInterval = setInterval(() => {
+      if (jumpHeight <= 0) {
+        clearInterval(jumpInterval);
+      } else {
+        playerY -= jumpSpeed;
+        jumpHeight -= jumpSpeed;
+        onground = false;
+      }
+    }, 10);
+    
+
+
+    let gravityInterval = setInterval(() => {
+      if (onground) {
+        clearInterval(gravityInterval);
+      } else {
+        playerY += gravity;
+      }
+    }, 10);
   }
 }
 
-// function Animation() {
-//   // ...
+  
 
-//   if (playerX >= gameCanvas.width - playerWidth) {
-//     // Change background image
-//     gameCanvas.style.backgroundImage = url(d.jpg);
-//   }
 
-//   // ...
-// }
 
 
 
@@ -237,71 +500,3 @@ function death(){
 // ------------ Start game ------------
 animate();
 
-//To do: Gravity, levels, lazer, sprite, platforms
-
-// gameCanvas.height = SCREENHEIGHT/1.082;
-// gameCanvas.width = SCREENWIDTH/1.1;
-// gameCanvas.style.top*(SCREENHEIGHT-gameCanvas.height)/2 + "px"
-// class background(){
-// }
-//   const background=new background("images/abstract-futuristic-background-technology-sci-fi-frame-hud-ui_313905-455.avif");
-
-
-
-//LAZER
-// setInterval(checkCollisions, 10);
-// let lazer=[];
-// for (let i = 0; i <10; i++) {
-//   let danger = {
-//     x:Math.floor(Math.random()*myCanvas.width),
-//     y:0,
-//     dx:0,
-//     dy:Math.floor(Math.random()*20+10),
-//     radius:10,
-//     color:"red",
-//   }
-  
-// }
-
-// let player={
-
-// }
-
-// c.drawImage(player.Img,player.x,player.y,player.)
-
-// // if(player.x+player.width>myCanvas.width){
-// //   myCanvas
-// // }
-
-
-// SPRITE
-// let img = new Image();
-// img.src = 'https://opengameart.org/sites/default/files/Green-Cap-Character-16x18.png';
-// img.onload = function() {
-//   window.requestAnimationFrame(gameLoop);
-// };
-
-// let canvas = document.querySelector('canvas');
-// let ctx = canvas.getContext('2d');
-
-// const SCALE = 2;
-// const WIDTH = 16;
-// const HEIGHT = 18;
-// const SCALED_WIDTH = SCALE * WIDTH;
-// const SCALED_HEIGHT = SCALE * HEIGHT;
-
-// function drawFrame(frameX, frameY, canvasX, canvasY) {
-//   ctx.drawImage(img,
-//                 frameX * WIDTH, frameY * HEIGHT, WIDTH, HEIGHT,
-//                 canvasX, canvasY, SCALED_WIDTH, SCALED_HEIGHT);
-// }
-
-// const CYCLE_LOOP = [0, 1, 0, 2];
-// let currentLoopIndex = 0;
-// let frameCount = 0;
-// let currentDirection = 0;
-
-// function gameLoop() {
-
-//   window.requestAnimationFrame(gameLoop);
-// }
