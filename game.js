@@ -12,6 +12,7 @@ gameCanvas.width = window.innerWidth;
 
 // -------------------------------------
 // Player variables
+
 let playerX = 150;
 let playerY = 580;
 let playerWidth = 170;
@@ -19,7 +20,6 @@ let playerHeight = 170;
 let dx = 20;
 let dy = 100;
 let onground = false;
-let reset = false;
 let currentBackground = 'aobGY_.gif';
 
 let backgroundState = 1; // 1 represents the first background, 2 represents the second background, 3 represents the third background
@@ -101,8 +101,11 @@ document.addEventListener("keydown", (e) => {
     case "ArrowUp":
       directions.up = true;
       break;
+      case "ArrowDown":
+        directions.down = true;
+        break;
     case " ":
-      playerY -= 330;
+      playerX += 150;
     default:
       break;
   }
@@ -119,7 +122,9 @@ document.addEventListener("keyup", (e) => {
     case "ArrowUp":
       directions.up = false;
       break;
-   
+      case "ArrowDown":
+        directions.down = false;
+        break;
     default:
       break;
   }
@@ -149,21 +154,7 @@ function animate() {
           break; 
         };
       
-      case 2:
-        if (backgroundState===2) {
-
-
-          break; 
-
-        };
-        
-      case 3:
-        if (backgroundState===3) {
-          // ObjectImage='images/k.gif'  
-
-        break;
-          
-        };
+      
         case 4:
           if (backgroundState===4) {
             ObjectImage='images/cdd.png'  
@@ -197,18 +188,22 @@ function animate() {
   
 
 
-  if (backgroundState===1) {  if(playerY>=objY && playerY>=objheight && playerX >= objX && playerX<=objX + objWidth && playerX<400 ){
+  if (backgroundState===1) {
+   if(playerY>=objY && playerY>=objheight && playerX >= objX && playerX<=objX + objWidth && playerX<400 ){
     onground = true;
     
   }
   else{
     onground=false;
   }
-  if (  playerX <= objectX &&
-    playerX > 915  &&
-    playerY <= objectY   &&
-    playerY > 500) {
-  
+
+  if (  playerX < objectX &&
+    playerX > 915 &&
+    playerY < 600 &&
+    500<= playerY) {
+    // Reseting
+        onground=false;
+
     playerX = 150;
     playerY = 580;
     
@@ -293,13 +288,20 @@ function animate() {
     }
   
   }
-  if (backgroundState===3) {if(playerY>=400  && playerX >=820 && playerX<=900 ){
-  
-
+  if (backgroundState===3) {
+    if(playerY>=350  && playerX >=820 && playerX<=900 ){
     playerY=471;
     playerX=180;
       
     }
+    
+    if(playerY>=500   && playerX >=0 && playerX<=gameCanvas.width ){
+  
+
+      playerY=471;
+      playerX=180;
+        
+      }
  
 
   if(playerY>=471 && playerY>=platformheight && playerX >= 0 && playerX<=gameCanvas.width ){
@@ -316,7 +318,8 @@ function animate() {
   }
 
   if (backgroundState===4) 
-  {if (  playerX < 1200  &&
+  {
+    if (  playerX < 1200  &&
     playerX + playerWidth > 1000 &&
     playerY < 600 &&
     playerY + playerHeight > 500) {
@@ -358,11 +361,13 @@ if (playerX >= gameCanvas.width - playerWidth) {
     playerY=270;
     playerX = 10; // Reset player's X position
     gameCanvas.style.backgroundSize = "contain";
-    
-  
+   
   } 
  
 
+  if (playerX >= gameCanvas.width - playerWidth) {
+   
+  }
 
 
 
@@ -370,15 +375,7 @@ if (playerX >= gameCanvas.width - playerWidth) {
 
 
  
-  if (playerX >= gameCanvas.width - playerWidth) {
-    if (backgroundState === 3) {
-      // Change to the third background
-      gameCanvas.style.backgroundImage = "url('images/win.jpg')";
-      backgroundState = 4;
-      playerX = 100; // Reset player's X position
-      gameCanvas.style.backgroundSize = "cover";
-    } 
-  }
+
  
 }
 
@@ -387,26 +384,18 @@ if (playerX >= gameCanvas.width - playerWidth) {
 
 
 
-if (gameCanvas.style.backgroundImage === "url('images/w.gif')") {
-  // Hide the images
-  image.style.display = 'none';
-  image2.style.display = 'none';
-} 
 
 
 if (playerX <= 0) {
   if (backgroundState===2) {
     gameCanvas.style.backgroundImage = "url('images/aobGY_.gif  ')";
     playerX=1350;
+    playerY=580;
     gameCanvas.style.backgroundSize="contain"
     backgroundState = 1;
 
     
   }
- 
-
-}
-if (playerX <= 0) {
   if (backgroundState===3) {
     gameCanvas.style.backgroundImage = "url('images/w.gif  ')";
     playerX=1350;
@@ -416,10 +405,9 @@ if (playerX <= 0) {
 
     
   }
- 
-
 
 }
+
 
 
 
@@ -440,8 +428,11 @@ if (playerX <= 0) {
   if (directions.right) {
     playerX += dx;
   }
-
-
+  
+  if (directions.down) {
+    playerY+=15 ;
+  }
+ 
   if (directions.up) {
     jump()
   }
@@ -458,40 +449,39 @@ if (playerX > gameCanvas.width){
   let body = document.getElementsByTagName("body");
   
 }
+// if (jumpHeight=>0) {
+//   onground=false;
+  
+// }
 
-// && playerX<LazserX
 function jump() {
-    if (onground ){
-      let jumpHeight = 500; // Max jump height
-    let jumpSpeed = 15; // Players Speed upwards
-    let gravity = 3; // Gravity
+  if (onground ){
+    let jumpHeight = 300; // Max jump height
+  let jumpSpeed = 15; // Players Speed upwards
+  let gravity = 4; // Gravity
 
-    
-    let jumpInterval = setInterval(() => {
-      if (jumpHeight <= 0) {
-        clearInterval(jumpInterval);
-      } else {
-        playerY -= jumpSpeed;
-        jumpHeight -= jumpSpeed;
-        onground = false;
-      }
-    }, 10);
-    
-
-
-    let gravityInterval = setInterval(() => {
-      if (onground) {
-        clearInterval(gravityInterval);
-      } else {
-        playerY += gravity;
-      }
-    }, 10);
-  }
-}
-
+  
+  let jumpInterval = setInterval(() => {
+    if (jumpHeight <= 0) {
+      clearInterval(jumpInterval);
+    } else {
+      playerY -= jumpSpeed;
+      jumpHeight -= jumpSpeed;
+      onground = false;
+    }
+  }, 10);
   
 
 
+  let gravityInterval = setInterval(() => {
+    if (onground) {
+      clearInterval(gravityInterval);
+    } else {
+      playerY += gravity;
+    }
+  }, 10);
+}
+}
 
 
 
