@@ -160,7 +160,6 @@ function animate() {
             ObjectImage='images/cdd.png'  
   
           break;
-            
           };
 
    
